@@ -1,6 +1,9 @@
 import streamlit as st
 import Decom_Automation
 import shutil
+import toxic_flt_table
+toxic_flt_table.main()
+
 
 st.set_page_config(page_title="Generate Decom Report", page_icon="📊", layout="centered")
 st.title("📊 Decom Dashboard Generator")
