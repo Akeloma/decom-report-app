@@ -85,9 +85,9 @@ def main():
 
     # === Group / Local tables
     group_tbl = final_summary[final_summary['Asset Type'] == 'Group'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
-    group_tbl['Asset Type'] = 'Group'
+    group_tbl['Asset Type'] = 'Group FLT General'
     local_tbl = final_summary[final_summary['Asset Type'] == 'Regional/Local'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
-    local_tbl['Asset Type'] = 'Regional/Local'
+    local_tbl['Asset Type'] = 'Regional/Local FLT General'
 
     for tbl in [group_tbl, local_tbl]:
         tbl.fillna(0, inplace=True)
