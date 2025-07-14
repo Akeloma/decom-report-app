@@ -84,9 +84,9 @@ def main():
     final_summary = pd.concat([final_summary, totals_row.to_frame().T], ignore_index=True)
 
     # === Group / Local tables
-    group_tbl = final_summary[final_summary['Asset Type'] == 'Group FLT General'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
+    group_tbl = final_summary[final_summary['Asset Type'] == 'Group'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
     group_tbl['Asset Type'] = 'Group'
-    local_tbl = final_summary[final_summary['Asset Type'] == 'Regional/Local General'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
+    local_tbl = final_summary[final_summary['Asset Type'] == 'Regional/Local'].copy().set_index('OE').reindex(all_oes, fill_value=0).reset_index()
     local_tbl['Asset Type'] = 'Regional/Local'
 
     for tbl in [group_tbl, local_tbl]:
