@@ -135,8 +135,8 @@ def main():
 
 
     # === Add Labels ===
-    ws["A49"] = "Group"
-    ws["M49"] = "Regional/Local"
+    ws["A49"] = "Group Toxic Details"
+    ws["M49"] = "Regional/Local Toxic Details"
 
     # Write group table starting at A15
 
