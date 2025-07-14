@@ -64,14 +64,14 @@ elif page == "Toxic & FLT Table":
             try:
                 toxic_flt_table.main()
 
-                with open("Detox_Tables_Formatted.xlsx", "rb") as f:
+                with open("Toxic&FLT_Tables.xlsx", "rb") as f:
                     excel_data = f.read()
 
                 st.success("✅ Toxic & FLT Report generated! Download below:")
                 st.download_button(
                     label="📥 Download Detox Report",
                     data=excel_data,
-                    file_name="Detox_Tables_Formatted.xlsx",
+                    file_name="Toxic&FLT_Tables.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
             except Exception as e:
