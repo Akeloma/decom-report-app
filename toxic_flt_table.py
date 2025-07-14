@@ -394,7 +394,7 @@ def main():
             ws.column_dimensions[col_letter].width = max_length + 2
 
     # === Save the file ===
-    wb.save("Detox_Tables_Formatted.xlsx")  # You can change filename as needed
+    wb.save("Toxic&FLT_Tables.xlsx")  # You can change filename as needed
 
 if __name__ == "__main__":
     main()
