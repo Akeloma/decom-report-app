@@ -149,6 +149,7 @@ def main():
             ws.column_dimensions[get_column_letter(col[0].column)].width = max_length + 2
 
         # Save file
+        wb.save(file_path)  # <-- Save the Decom Dashboard sheet here before overwriting wb
         print("✅ Decom Table is completed!")
 
 
@@ -160,7 +161,7 @@ def main():
 
         # === Rename relevant columns only from actual headers ===
         df = df.rename(columns={
-            "Name": "OE",                      # Column A
+            "OE Name": "OE",                      # Column A
             "Name.2": "Application",           # Column I
             "Forecast End Date": "ForecastDate",  # Column N
             "Phase": "Phase"                   # Column P
