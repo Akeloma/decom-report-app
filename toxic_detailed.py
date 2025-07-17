@@ -141,11 +141,11 @@ def main():
     # Write group table starting at A15
 
     # === Style headers above both tables ===
-    ws["A49"] = "Group"
+    ws["A49"] = "Group Toxic Details"
     ws["A49"].fill = PatternFill(start_color="00B0F0", end_color="00B0F0", fill_type="solid")
     ws["A49"].font = Font(bold=True, color="FFFFFF")
 
-    ws["M49"] = "Regional/Local"
+    ws["M49"] = "Regional/Local Toxic Details"
     ws["M49"].fill = PatternFill(start_color="00B0F0", end_color="00B0F0", fill_type="solid")
     ws["M49"].font = Font(bold=True, color="FFFFFF")
 
