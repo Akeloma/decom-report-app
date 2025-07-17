@@ -99,15 +99,19 @@ def main():
             (df["Key"] == key) & (df["Date"] == end_date)
         ]["Number of IT Assets"].sum()
 
+        start_label = f"As of ({start_date.strftime('%-d %b %Y')})"
+        end_label = f"As of ({end_date.strftime('%-d %b %Y')})"
+
         rows.append({
             **details,
-            "Start Date Value": int(start_value),
-            "End Date Value": int(end_value),
+            start_label: int(start_value),
+            end_label: int(end_value),
             "Delta": val["Delta"],
             "Added": val["Added"],
             "Detoxed": val["Detoxed"],
             "Carried Over": val["Carried"]
         })
+
 
 
     df_result = pd.DataFrame(rows)
@@ -173,7 +177,7 @@ def main():
         #     ws.cell(row=total_row, column=start_col + i).font = header_font
 
     write_table(group_df, 1)
-    write_table(regional_df, 13)
+    write_table(regional_df, 15)
 
     wb.save(file_path)
     print("✅ FLT Detailed Tables Done!")
