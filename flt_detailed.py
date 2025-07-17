@@ -89,13 +89,26 @@ def main():
         if val["Added"] == 0 and val["Detoxed"] == 0 and val["Carried"] == 0 and val["Delta"] == 0:
             continue
         details = val["Details"]
+
+        # Pull FLT values at start_date and end_date
+        start_value = df[
+            (df["Key"] == key) & (df["Date"] == start_date)
+        ]["Number of IT Assets"].sum()
+
+        end_value = df[
+            (df["Key"] == key) & (df["Date"] == end_date)
+        ]["Number of IT Assets"].sum()
+
         rows.append({
             **details,
+            "Start Date Value": int(start_value),
+            "End Date Value": int(end_value),
             "Delta": val["Delta"],
             "Added": val["Added"],
             "Detoxed": val["Detoxed"],
             "Carried Over": val["Carried"]
         })
+
 
     df_result = pd.DataFrame(rows)
     group_df = df_result[df_result["IT Component Type"].str.upper().str.strip() == "GROUP"]
