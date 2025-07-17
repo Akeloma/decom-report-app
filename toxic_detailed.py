@@ -39,8 +39,7 @@ def main():
     available_dates = sorted(df_filtered["Date"].dropna().unique())
 
     # Find first available date >= start_date
-    # month_start = next((d for d in available_dates if d >= start_date), None)
-    month_start = start_date.normalize()
+    month_start = next((d for d in available_dates if d >= start_date), None)
     # Find first available date <= end_date (most recent before or on end_date)
     month_end = next((d for d in reversed(available_dates) if d <= end_date), None)
 
