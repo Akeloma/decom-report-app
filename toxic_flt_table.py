@@ -164,24 +164,32 @@ def main():
 
     #------------------------------------------------------------------------------------------------
     # === Define Quarters Function ===
-    def get_quarter(date):
+    def get_quarter_with_year(date):
         if pd.isna(date):
             return None
+        year = date.year
         if date.month in [1, 2, 3]:
-            return 'Q1'
+            quarter = 'Q1'
         elif date.month in [4, 5, 6]:
-            return 'Q2'
+            quarter = 'Q2'
         elif date.month in [7, 8, 9]:
-            return 'Q3'
+            quarter = 'Q3'
         elif date.month in [10, 11, 12]:
-            return 'Q4'
-        return None
+            quarter = 'Q4'
+        else:
+            return None
+    
+        if year == 2025:
+            return quarter
+        else:
+            return f'{quarter}_{year}'
+
 
     # === Get Latest Snapshot for Toxic ===
     latest_toxic_date = toxic_df['Date'].max()
     latest_toxic = toxic_df[toxic_df['Date'] == latest_toxic_date].copy()
     latest_toxic['Planned Completion Date'] = pd.to_datetime(latest_toxic['Planned Completion Date'], errors='coerce')
-    latest_toxic['Quarter'] = latest_toxic['Planned Completion Date'].apply(get_quarter)
+    latest_toxic['Quarter'] = latest_toxic['Planned Completion Date'].apply(get_quarter_with_year)
     latest_toxic['Quarter'].fillna('Unknown', inplace=True)
     latest_toxic['Data Type'] = 'Toxic'
 
@@ -189,7 +197,7 @@ def main():
     latest_flt_date = flt_df['Date'].max()
     latest_flt = flt_df[flt_df['Date'] == latest_flt_date].copy()
     latest_flt['Planned Completion Date'] = pd.to_datetime(latest_flt['Planned Completion Date'], errors='coerce')
-    latest_flt['Quarter'] = latest_flt['Planned Completion Date'].apply(get_quarter)
+    latest_flt['Quarter'] = latest_flt['Planned Completion Date'].apply(get_quarter_with_year)
     latest_flt['Quarter'].fillna('Unknown', inplace=True)
     latest_flt['Data Type'] = 'FLT'
 
@@ -213,9 +221,12 @@ def main():
     ).reset_index()
 
     # Ensure Q1–Q4 columns exist
-    for q in ['Q1', 'Q2', 'Q3', 'Q4']:
+    # Ensure all quarter columns exist in pivot (including dynamic ones like Q1_2026)
+    all_quarters = quarter_summary['Quarter'].dropna().unique()
+    for q in all_quarters:
         if q not in quarter_pivot.columns:
             quarter_pivot[q] = 0
+
 
 
     # Rename for consistency
@@ -227,14 +238,10 @@ def main():
 
     # === Add Total Row Function ===
     def add_total_row(df):
-        total = df[['Q1', 'Q2', 'Q3', 'Q4']].sum()
-        total_row = {
-            'OE': 'Total',
-            'Q1': total['Q1'],
-            'Q2': total['Q2'],
-            'Q3': total['Q3'],
-            'Q4': total['Q4'],
-        }
+        quarter_cols = [col for col in df.columns if col.startswith('Q')]
+        total = df[quarter_cols].sum()
+        total_row = {'OE': 'Total'}
+        total_row.update(total.to_dict())
         return pd.concat([df, pd.DataFrame([total_row])], ignore_index=True)
 
     # group_tbl = add_total_row(group_tbl)  #UNCOMMENT IF IT DOESNT WORK OUT
@@ -263,16 +270,29 @@ def main():
 
 
     # === Reorder Q1–Q4 columns to be in proper order
-    quarter_order = ["Q1", "Q2", "Q3", "Q4"]
+    import re
 
-    # Group Table Column Order
-    group_cols = [col for col in group_final.columns if col not in quarter_order]
-    group_final = group_final[group_cols + quarter_order]
-
-    # Local Table Column Order
-    local_cols = [col for col in local_final.columns if col not in quarter_order]
-    local_final = local_final[local_cols + quarter_order]
-
+    # === Reorder ALL Quarter Columns (Q1, Q2, ..., Q1_2026, Q2_2026, ...)
+    def sort_quarters(cols):
+        def quarter_key(col):
+            match = re.match(r"Q([1-4])(?:_(\d{4}))?", col)
+            if match:
+                q_num = int(match.group(1))
+                year = int(match.group(2)) if match.group(2) else 2025  # Default to 2025 if no year
+                return (year, q_num)
+            return (9999, 9)  # Put anything non-quarter at the end
+        return sorted([c for c in cols if c.startswith("Q")], key=quarter_key)
+    
+    # Get ordered list of quarters for each table
+    group_quarter_cols = sort_quarters(group_final.columns)
+    local_quarter_cols = sort_quarters(local_final.columns)
+    
+    # Reorder columns
+    group_non_quarter_cols = [c for c in group_final.columns if c not in group_quarter_cols]
+    group_final = group_final[group_non_quarter_cols + group_quarter_cols]
+    
+    local_non_quarter_cols = [c for c in local_final.columns if c not in local_quarter_cols]
+    local_final = local_final[local_non_quarter_cols + local_quarter_cols]
 
     # === Add Total Row to group_final ===
     group_total = group_final.select_dtypes(include='number').sum()
