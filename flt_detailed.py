@@ -129,7 +129,7 @@ def main():
 
     # Title rows
     ws["A64"] = "Group FLT Details"
-    ws["M64"] = "Regional/Local FLT Details"
+    ws["O64"] = "Regional/Local FLT Details"
     for cell in [ws["A64"], ws["M64"]]:
         cell.fill = PatternFill("solid", fgColor="00B0F0")
         cell.font = Font(bold=True, color="FFFFFF")
