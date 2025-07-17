@@ -129,7 +129,7 @@ def main():
 
     # Title rows
     ws["A64"] = "Group FLT Details"
-    ws["O64"] = "Regional/Local FLT Details"
+    ws["M64"] = "Regional/Local FLT Details"
     for cell in [ws["A64"], ws["M64"]]:
         cell.fill = PatternFill("solid", fgColor="00B0F0")
         cell.font = Font(bold=True, color="FFFFFF")
@@ -160,21 +160,21 @@ def main():
             cell.fill = header_fill
             cell.font = header_font
         
-        # Write the "Total" label and the formulas for the 4 metric columns
-        ws.cell(row=total_row, column=start_col, value="Total")
-        
-        for i, col in enumerate(["Delta", "Added", "Detoxed", "Carried Over"], start=6):
-            col_letter = chr(ord('A') + start_col - 1 + i)
-            formula_cell = ws.cell(row=total_row, column=start_col + i)
-            formula_cell.value = f"=SUM({col_letter}66:{col_letter}{total_row-1})"
+        from openpyxl.utils import get_column_letter
 
-        
-        # for i, col in enumerate(["Delta", "Added", "Detoxed", "Carried Over"], start=6):
-        #     col_letter = chr(ord('A') + start_col - 1 + i)
-        #     ws.cell(row=total_row, column=start_col + i).value = f"=SUM({col_letter}26:{col_letter}{total_row-1})"
-        #     ws.cell(row=total_row, column=start_col + i).alignment = center_align
-        #     ws.cell(row=total_row, column=start_col + i).fill = header_fill
-        #     ws.cell(row=total_row, column=start_col + i).font = header_font
+        # Write the "Total" label
+        ws.cell(row=total_row, column=start_col, value="Total")
+
+        # Dynamically sum all numeric columns (except text ones like "IT Component Name")
+        for i, col_name in enumerate(df.columns, start=start_col):
+            if df[col_name].dtype in [int, float]:
+                col_letter = get_column_letter(i)
+                formula = f"=SUM({col_letter}66:{col_letter}{total_row-1})"
+                cell = ws.cell(row=total_row, column=i)
+                cell.value = formula
+                cell.alignment = center_align
+                cell.fill = header_fill
+                cell.font = header_font
 
     write_table(group_df, 1)
     write_table(regional_df, 15)
