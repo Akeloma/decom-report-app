@@ -1,0 +1,5 @@
+1. yes im not sure if it should be merged across the whole table, and also i dont think you need to do the whole header filling for headers.maybe just merge the A1 to C1??
+2. only Grand Total 2025 should be filled with colour, essentially only that cell where Grand Total 2025 is mentioned.
+3. nope nothing has to be bold except for the bumbers in the total row, thats it, and also just the Grand Total 2025. 
+4.  you could help me to freeze the columns A-C, thats it.
+5. i was hoping to get help for the borders of the table. essentially i want the gridlines view to be off, and i want the table borders to look like the one u can see in the picture, is that possible? im attaching my current code :) but i hope you dont complicate the borders, thats my fear.
