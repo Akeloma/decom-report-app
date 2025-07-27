@@ -1,4 +1,4 @@
-def generate_flt_pvt_sheet():
+def generate_flt_pvt_sheet(wb):
     import pandas as pd
     from openpyxl import Workbook
     from openpyxl.utils import get_column_letter
