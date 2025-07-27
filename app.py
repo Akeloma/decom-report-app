@@ -78,62 +78,30 @@ elif page == "Toxic & FLT Table":
                 st.error(f"❌ Something went wrong:\n\n{e}")
 
 # === Page 3: One-Click Full Toxic & FLT ===
-elif page == "One-Click Full Toxic & FLT":
-    st.subheader("🧩 One-Click Full Toxic & FLT Automation")
-    st.markdown("Upload your **manual calculated.xlsx** file and run all four reports with a single click.")
+elif page == "Desmond's Pivot Tables":
+    st.subheader("🖥️ Automated Pivot Tables (Toxic & FLT) for Desmond")
+    st.markdown("Upload any Excel file and generate the full Archer report.")
 
-    uploaded_file = st.file_uploader("📁 Upload manual calculated.xlsx", type=["xlsx"], key="oneclick")
+    uploaded_file = st.file_uploader("📁 Upload your Excel file", type=["xlsx"], key="archer")
 
     if uploaded_file:
-        save_uploaded_file(uploaded_file, "manual calculated.xlsx")
-        st.success("✅ File uploaded successfully.")
+        input_filename = uploaded_file.name
+        with open(input_filename, "wb") as f:
+            f.write(uploaded_file.getbuffer())
 
-        if st.button("🚀 Run All Reports"):
+        st.success(f"✅ Uploaded file: {input_filename}")
+
+        if st.button("🧠 Generate Archer Report"):
             try:
-                run_all_reports.run_all()
+                run_all_reports.generate_full_report()
+                st.success("✅ Report generated successfully!")
 
-                with open("manual calculated.xlsx", "rb") as f:
-                    excel_data = f.read()
-                
-                st.success("✅ All 4 reports generated in one file! Download below:")
-                st.download_button(
-                    label="📥 Download Updated Toxic & FLT Report",
-                    data=excel_data,
-                    file_name="Updated_Toxic_FLT_Report.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
-
-
+                with open("Archer_Toxic_Report_Final.xlsx", "rb") as file:
+                    st.download_button(
+                        label="📥 Download Excel Report",
+                        data=file,
+                        file_name="Archer_Toxic_Report_Final.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
             except Exception as e:
-                st.error(f"❌ Error occurred:\n\n{e}")
-
-
-elif page == "Desmond's Pivot Tables"
-    st.subheader("🖥️ Automated Pivot Tables(Toxic & FLT) for Desmond")
-    st.markdown("Upload your file and run all reports with a single click.")
-    uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
-
-if uploaded_file is not None:
-    # Save uploaded file with its original name
-    input_filename = uploaded_file.name
-    with open(input_filename, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-
-    st.success(f"Uploaded file: {input_filename}")
-
-    # Generate report when button is clicked
-    if st.button("Generate Archer Report"):
-        # Run your report generator
-        run_all_reports.generate_full_report()
-
-        st.success("Report generated successfully!")
-
-        # Provide download link for the generated Excel
-        with open("Archer_Toxic_Report_Final.xlsx", "rb") as file:
-            st.download_button(
-                label="Download Excel Report",
-                data=file,
-                file_name="Archer_Toxic_Report_Final.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-
+                st.error(f"❌ Error occurred during generation:\n\n{e}")
