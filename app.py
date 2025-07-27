@@ -10,7 +10,7 @@ st.set_page_config(page_title="Report Generator", page_icon="📊", layout="cent
 # === Sidebar navigation ===
 page = st.sidebar.selectbox(
     "🔧 Select Report Type",
-    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT"]
+    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT", "Desmond's Pivot Tables"]
 )
 
 st.title("📊 IT Governance Automation Portal")
@@ -106,3 +106,34 @@ elif page == "One-Click Full Toxic & FLT":
 
             except Exception as e:
                 st.error(f"❌ Error occurred:\n\n{e}")
+
+
+elif page == "Desmond's Pivot Tables"
+    st.subheader("🖥️ Automated Pivot Tables(Toxic & FLT) for Desmond")
+    st.markdown("Upload your file and run all reports with a single click.")
+    uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
+
+if uploaded_file is not None:
+    # Save uploaded file with its original name
+    input_filename = uploaded_file.name
+    with open(input_filename, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+    st.success(f"Uploaded file: {input_filename}")
+
+    # Generate report when button is clicked
+    if st.button("Generate Archer Report"):
+        # Run your report generator
+        run_all_reports.generate_full_report()
+
+        st.success("Report generated successfully!")
+
+        # Provide download link for the generated Excel
+        with open("Archer_Toxic_Report_Final.xlsx", "rb") as file:
+            st.download_button(
+                label="Download Excel Report",
+                data=file,
+                file_name="Archer_Toxic_Report_Final.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
