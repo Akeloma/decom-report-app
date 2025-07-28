@@ -371,14 +371,14 @@ def main():
             cell.alignment = Alignment(horizontal="center")
 
         # === Remove fill from Row 1 and Row 12 (Group sheet)
-    for col in range(6, ws1.max_column + 1):
-        ws1.cell(row=1, column=col).fill = PatternFill(fill_type=None)
-        ws1.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+            for col in range(6, ws1.max_column + 1):
+                ws1.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+                ws1.cell(row=12, column=col).fill = PatternFill(fill_type=None)
 
-    # === Remove fill from Row 1 and Row 12 (Local sheet)
-    for col in range(6, ws2.max_column + 1):
-        ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
-        ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+            # === Remove fill from Row 1 and Row 12 (Local sheet)
+            for col in range(6, ws2.max_column + 1):
+                ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+                ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
 
 
 
