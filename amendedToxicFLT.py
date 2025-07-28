@@ -145,8 +145,7 @@ def main():
     # === Final Merge Toxic + FLT ===
     group_flt = flt_final[flt_final['Asset Type'] == 'Group'].drop(columns='Asset Type')
     local_flt = flt_final[flt_final['Asset Type'] == 'Regional/Local'].drop(columns='Asset Type')
-    
-    current_year = pd.Timestamp.now().year  # ✅ Define first!
+
     group_summary = pd.merge(group_toxic_df, group_flt, on='OE', how='left').fillna(0)
     local_summary = pd.merge(local_toxic_df, local_flt, on='OE', how='left').fillna(0)
 
@@ -302,13 +301,16 @@ def main():
     local_final = local_final[local_non_quarter_cols + local_quarter_cols]
 
     # === Add Total Row to group_final ===
-    group_total = group_final.select_dtypes(include='number').sum()
+    group_total = group_final.drop(columns=["Year"]).select_dtypes(include='number').sum()
     group_total["OE"] = "Total"
+    group_total["Year"] = ""  # Keep Year column empty for total row
     group_final = pd.concat([group_final, pd.DataFrame([group_total])], ignore_index=True)
 
+
     # === Add Total Row to local_final ===
-    local_total = local_final.select_dtypes(include='number').sum()
+    local_total = local_final.drop(columns=["Year"]).select_dtypes(include='number').sum()
     local_total["OE"] = "Total"
+    local_total["Year"] = ""
     local_final = pd.concat([local_final, pd.DataFrame([local_total])], ignore_index=True)
 
     # Keep only required columns
@@ -368,6 +370,13 @@ def main():
 
             cell.alignment = Alignment(horizontal="center")
 
+    # === Remove fill from Row 1 and Row 12 (Group sheet) from column F onward
+    for col in range(6, ws1.max_column + 1):  # F onwards = col 6
+        ws1.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+        ws1.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+
+
+
         # === Manually style last row in Group sheet ===
     last_row = ws1.max_row
     for col in range(1, ws1.max_column + 1):
@@ -408,6 +417,12 @@ def main():
                 cell.fill = PatternFill(start_color="DDEBF7", end_color="DDEBF7", fill_type="solid")
 
             cell.alignment = Alignment(horizontal="center")
+
+    # === Remove fill from Row 1 and Row 12 (Local sheet) from column F onward
+    for col in range(6, ws2.max_column + 1):
+        ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+        ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+
 
         # === Manually style last row in Local sheet ===
     last_row = ws2.max_row
