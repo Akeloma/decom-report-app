@@ -2,6 +2,7 @@ import streamlit as st
 import Decom_Automation
 import toxic_flt_table
 import run_all_reports
+import amendedToxicFLT
 
 
 # === Set page config ===
@@ -10,7 +11,7 @@ st.set_page_config(page_title="Report Generator", page_icon="📊", layout="cent
 # === Sidebar navigation ===
 page = st.sidebar.selectbox(
     "🔧 Select Report Type",
-    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT", "Desmond's Pivot Tables"]
+    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT", "Desmond's Pivot Tables", "Amended Toxic & FLT"]
 )
 
 st.title("📊 IT Governance Automation Portal")
@@ -135,3 +136,28 @@ elif page == "Desmond's Pivot Tables":
                     )
             except Exception as e:
                 st.error(f"❌ Error occurred during generation:\n\n{e}")
+
+# === Page 5: Amended Toxic & FLT Table ===
+elif page == "Amended Toxic & FLT":
+    st.subheader("♻️ Amended Toxic & FLT Report")
+    st.markdown("Upload your file below. This version removes quarter columns and adds the Year column.")
+
+    uploaded_file = st.file_uploader("📁 Upload yourfile.xlsx", type=["xlsx"], key="amended")
+
+    if uploaded_file:
+        save_uploaded_file(uploaded_file, uploaded_file.name)
+        st.success("✅ File uploaded successfully.")
+
+        if st.button("📊 Generate Amended Report"):
+            try:
+                amendedToxicFLT.main()
+
+                with open("Toxic&FLT_Tables.xlsx", "rb") as file:
+                    st.download_button(
+                        label="📥 Download Amended Toxic & FLT Report",
+                        data=file,
+                        file_name="Amended_Toxic_FLT_Report.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+            except Exception as e:
+                st.error(f"❌ Error occurred:\n\n{e}")
