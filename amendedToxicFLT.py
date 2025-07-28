@@ -9,7 +9,7 @@ from openpyxl.styles.borders import Border, Side
 
 
 def main():
-
+    current_year = pd.Timestamp.now().year
     # === Load Excel File ===
     file_path = "manual calculated.xlsx"  # Update if needed
     df_raw = pd.read_excel(file_path, sheet_name="Overall database", skiprows=5)
@@ -256,7 +256,7 @@ def main():
 
     #------------------------------------------------final output below-------------------
 
-    current_year = pd.Timestamp.now().year
+
 
     # === Merge Quarters into Final Summary ===
     group_final = pd.merge(group_summary, group_tbl, on="OE", how="left").fillna(0)
@@ -370,10 +370,15 @@ def main():
 
             cell.alignment = Alignment(horizontal="center")
 
-    # === Remove fill from Row 1 and Row 12 (Group sheet) from column F onward
-    for col in range(6, ws1.max_column + 1):  # F onwards = col 6
+        # === Remove fill from Row 1 and Row 12 (Group sheet)
+    for col in range(6, ws1.max_column + 1):
         ws1.cell(row=1, column=col).fill = PatternFill(fill_type=None)
         ws1.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+
+    # === Remove fill from Row 1 and Row 12 (Local sheet)
+    for col in range(6, ws2.max_column + 1):
+        ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+        ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
 
 
 
