@@ -370,6 +370,18 @@ def main():
 
             cell.alignment = Alignment(horizontal="center")
 
+        # === Remove fill from Row 1 and Row 12 (Group sheet)
+            for col in range(6, ws1.max_column + 1):
+                ws1.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+                ws1.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+
+            # === Remove fill from Row 1 and Row 12 (Local sheet)
+            for col in range(6, ws2.max_column + 1):
+                ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+                ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
+
+
+
         # === Manually style last row in Group sheet ===
     last_row = ws1.max_row
     for col in range(1, ws1.max_column + 1):
@@ -428,10 +440,10 @@ def main():
 
     # === Autofit column widths ===
     for ws in [ws1, ws2]:
-        for row in ws.iter_rows(min_col=6, max_col=ws.max_column, min_row=1, max_row=ws.max_row):
-            for cell in row:
-                cell.fill = PatternFill(fill_type=None)
-                cell.font = Font(color="000000", bold=False)
+        for col in ws.columns:
+            max_length = max(len(str(cell.value)) if cell.value is not None else 0 for cell in col)
+            col_letter = get_column_letter(col[0].column)
+            ws.column_dimensions[col_letter].width = max_length + 2
 
     # === Save the file ===
     wb.save("Toxic&FLT_Tables.xlsx")  # You can change filename as needed
