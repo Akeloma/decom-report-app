@@ -411,6 +411,10 @@ def main():
 
             cell.alignment = Alignment(horizontal="center")
 
+    # === Remove fill from Row 1 and Row 12 (Local sheet) from column F onward
+    for col in range(6, ws2.max_column + 1):
+        ws2.cell(row=1, column=col).fill = PatternFill(fill_type=None)
+        ws2.cell(row=12, column=col).fill = PatternFill(fill_type=None)
 
 
         # === Manually style last row in Local sheet ===
@@ -428,8 +432,6 @@ def main():
             for cell in row:
                 cell.fill = PatternFill(fill_type=None)
                 cell.font = Font(color="000000", bold=False)
-                cell.border = thin_border  # keep border consistent
-                cell.alignment = Alignment(horizontal="center")  # reset alignment
 
     # === Save the file ===
     wb.save("Toxic&FLT_Tables.xlsx")  # You can change filename as needed
