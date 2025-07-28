@@ -145,7 +145,8 @@ def main():
     # === Final Merge Toxic + FLT ===
     group_flt = flt_final[flt_final['Asset Type'] == 'Group'].drop(columns='Asset Type')
     local_flt = flt_final[flt_final['Asset Type'] == 'Regional/Local'].drop(columns='Asset Type')
-
+    
+    current_year = pd.Timestamp.now().year  # ✅ Define first!
     group_summary = pd.merge(group_toxic_df, group_flt, on='OE', how='left').fillna(0)
     local_summary = pd.merge(local_toxic_df, local_flt, on='OE', how='left').fillna(0)
 
