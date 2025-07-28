@@ -145,7 +145,7 @@ elif page == "Amended Toxic & FLT":
     uploaded_file = st.file_uploader("📁 Upload yourfile.xlsx", type=["xlsx"], key="amended")
 
     if uploaded_file:
-        save_uploaded_file(uploaded_file, uploaded_file.name)
+        save_uploaded_file(uploaded_file, "manual calculated.xlsx")
         st.success("✅ File uploaded successfully.")
 
         if st.button("📊 Generate Amended Report"):
