@@ -10,7 +10,7 @@ from openpyxl.styles import Alignment
 def main(filename): 
 
     # === Load Excel File ===
-    file_path = "manual calculated.xlsx"
+    file_path = filename
     df = pd.read_excel(file_path, sheet_name="Overall database", skiprows=5)
 
     # === Clean Column Names ===
