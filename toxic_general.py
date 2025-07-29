@@ -6,7 +6,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 
 
-def main():
+def main(filename):
 
     # === Load your Excel file ===
     file_path = "manual calculated.xlsx"
