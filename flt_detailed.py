@@ -9,7 +9,7 @@ from collections import defaultdict
 def main(filename):
 
     # === CONFIGURATION ===
-    file_path = "manual calculated.xlsx"
+    file_path = filename
     wb = load_workbook(file_path, data_only=True)
     ws = wb["Toxic & FLT Report"]
 
