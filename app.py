@@ -86,14 +86,15 @@ elif page == "One-Click Full Toxic & FLT":
     uploaded_file = st.file_uploader("📁 Upload manual calculated.xlsx", type=["xlsx"], key="oneclick")
 
     if uploaded_file:
-        save_uploaded_file(uploaded_file, "manual calculated.xlsx")
+        uploaded_filename = uploaded_file.name
+        save_uploaded_file(uploaded_file, uploaded_filename)
         st.success("✅ File uploaded successfully.")
 
         if st.button("🚀 Run All Reports"):
             try:
-                run_all_TF.run_all()
+                run_all_TF.run_all(uploaded_filename)
 
-                with open("manual calculated.xlsx", "rb") as f:
+                with open(uploaded_filename, "rb") as f:
                     excel_data = f.read()
                 
                 st.success("✅ All 4 reports generated in one file! Download below:")
