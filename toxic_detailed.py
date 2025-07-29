@@ -7,7 +7,7 @@ from datetime import datetime
 from openpyxl.styles import Alignment
 
 
-def main(): 
+def main(filename): 
 
     # === Load Excel File ===
     file_path = "manual calculated.xlsx"
