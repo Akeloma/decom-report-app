@@ -7,7 +7,7 @@ import os
 def main(filename):
 
     # === File paths ===
-    file_path = "manual calculated.xlsx"
+    file_path = filename
     sheet_name = "Overall database"
 
     # === Load data ===
