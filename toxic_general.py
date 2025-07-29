@@ -9,7 +9,7 @@ from openpyxl.utils import get_column_letter
 def main(filename):
 
     # === Load your Excel file ===
-    file_path = "manual calculated.xlsx"
+    file_path = filename
     df_raw = pd.read_excel(file_path, sheet_name="Overall database", skiprows=5)
 
     # === Clean and prepare data ===
