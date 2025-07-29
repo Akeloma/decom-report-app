@@ -4,7 +4,7 @@ from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
 import os
 
-def main():
+def main(filename):
 
     # === File paths ===
     file_path = "manual calculated.xlsx"
