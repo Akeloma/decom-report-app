@@ -6,7 +6,7 @@ from datetime import datetime
 from collections import defaultdict
 
 
-def main():
+def main(filename):
 
     # === CONFIGURATION ===
     file_path = "manual calculated.xlsx"
