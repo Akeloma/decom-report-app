@@ -91,7 +91,7 @@ elif page == "One-Click Full Toxic & FLT":
 
         if st.button("🚀 Run All Reports"):
             try:
-                run_all_Toxic&FLT.run_all()
+                run_all_TF.run_all()
 
                 with open("manual calculated.xlsx", "rb") as f:
                     excel_data = f.read()
