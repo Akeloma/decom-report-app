@@ -1,5 +1,5 @@
 
-def FLThirtyMth():
+def FLThirtyMth(input_filename):
     import pandas as pd
     from datetime import datetime
     from dateutil.relativedelta import relativedelta
@@ -10,7 +10,7 @@ def FLThirtyMth():
 
     # === Step 1: Load Excel File ===
     # file_path = "manual calculated.xlsx"  # <-- Update this path if needed
-    df = pd.read_excel(input_file_path, sheet_name="Overall database", header=None)
+    raw_df = pd.read_excel(input_file_path, sheet_name="Overall database", header=None)
     
     # === Step 2: Extract headers ===
     header_row_idx = raw_df[raw_df.iloc[:, 0] == "Allianz OE Name"].index[0]
