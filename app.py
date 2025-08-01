@@ -182,7 +182,7 @@ elif page == "FLT 30 Month Forecast":
             try:
                 FLThirtyMth.FLThirtyMth(input_filename)
 
-                with open("FLT_Detailed_Totals.xlsx", "rb") as file:
+                with open("FLT_Forecast.xlsx", "rb") as file:
                     st.download_button(
                         label="📥 Download FLT Detailed Report",
                         data=file,
