@@ -163,26 +163,30 @@ elif page == "Amended Toxic & FLT":
                     )
             except Exception as e:
                 st.error(f"❌ Error occurred:\n\n{e}")
+                
 # === Page 6: FLT Detailed Totals ===
-elif page == "FLT Detailed Totals":
-    st.subheader("🧾 FLT Detailed Report with OE Totals")
-    st.markdown("Upload your **manual calculated.xlsx** file to generate a detailed report with OE subtotals.")
+elif page == "FLT 30 Month Forecast":
+    st.subheader("🧾 FLT 30 Month Forecast")
+    st.markdown("Upload your file to generate a forecast report with OE subtotals.")
 
-    uploaded_file = st.file_uploader("📁 Upload manual calculated.xlsx", type=["xlsx"], key="flt_detailed")
-
+    uploaded_file = st.file_uploader("📁 Upload file", type=["xlsx"], key="flt_detailed")
+    
     if uploaded_file:
-        save_uploaded_file(uploaded_file, "manual calculated.xlsx")
-        st.success("✅ File uploaded successfully.")
+        input_filename = uploaded_file.name
+        with open(input_filename, "wb") as f:
+            f.write(uploaded_file.getbuffer())
 
-        if st.button("📈 Generate FLT Detailed Report"):
+        st.success(f"✅ Uploaded file: {input_filename}")
+
+        if st.button("📈 Generate FLT 30 Month Forecast"):
             try:
-                flt_detailed_totals.generate_flt_detailed_report()
+                FLThirtyMth.FLThirtyMth(input_filename)
 
                 with open("FLT_Detailed_Totals.xlsx", "rb") as file:
                     st.download_button(
                         label="📥 Download FLT Detailed Report",
                         data=file,
-                        file_name="FLT_Detailed_Totals.xlsx",
+                        file_name="FLT_Forecast.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
             except Exception as e:
