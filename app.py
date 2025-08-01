@@ -4,6 +4,7 @@ import toxic_flt_table
 import run_all_reports
 import amendedToxicFLT
 import run_all_TF
+import FLThirtyMth
 
 # === Set page config ===
 st.set_page_config(page_title="Report Generator", page_icon="📊", layout="centered")
@@ -11,7 +12,7 @@ st.set_page_config(page_title="Report Generator", page_icon="📊", layout="cent
 # === Sidebar navigation ===
 page = st.sidebar.selectbox(
     "🔧 Select Report Type",
-    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT", "Desmond's Pivot Tables", "Amended Toxic & FLT"]
+    ["Decom Automation", "Toxic & FLT Table", "One-Click Full Toxic & FLT", "Desmond's Pivot Tables", "Amended Toxic & FLT","FLT 30 Month Forecast"]
 )
 
 st.title("📊 IT Governance Automation Portal")
@@ -158,6 +159,30 @@ elif page == "Amended Toxic & FLT":
                         label="📥 Download Amended Toxic & FLT Report",
                         data=file,
                         file_name="Amended_Toxic_FLT_Report.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+            except Exception as e:
+                st.error(f"❌ Error occurred:\n\n{e}")
+# === Page 6: FLT Detailed Totals ===
+elif page == "FLT Detailed Totals":
+    st.subheader("🧾 FLT Detailed Report with OE Totals")
+    st.markdown("Upload your **manual calculated.xlsx** file to generate a detailed report with OE subtotals.")
+
+    uploaded_file = st.file_uploader("📁 Upload manual calculated.xlsx", type=["xlsx"], key="flt_detailed")
+
+    if uploaded_file:
+        save_uploaded_file(uploaded_file, "manual calculated.xlsx")
+        st.success("✅ File uploaded successfully.")
+
+        if st.button("📈 Generate FLT Detailed Report"):
+            try:
+                flt_detailed_totals.generate_flt_detailed_report()
+
+                with open("FLT_Detailed_Totals.xlsx", "rb") as file:
+                    st.download_button(
+                        label="📥 Download FLT Detailed Report",
+                        data=file,
+                        file_name="FLT_Detailed_Totals.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
             except Exception as e:
