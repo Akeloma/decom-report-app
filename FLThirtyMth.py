@@ -10,7 +10,7 @@ def FLThirtyMth(input_filename):
 
     # === Step 1: Load Excel File ===
     # file_path = "manual calculated.xlsx"  # <-- Update this path if needed
-    raw_df = pd.read_excel(input_file_path, sheet_name="Overall database", header=None)
+    raw_df = pd.read_excel(input_filename, sheet_name="Overall database", header=None)
     
     # === Step 2: Extract headers ===
     header_row_idx = raw_df[raw_df.iloc[:, 0] == "Allianz OE Name"].index[0]
