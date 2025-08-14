@@ -13,7 +13,7 @@ def generate_group_flt_details(wb):
     df = pd.read_excel(file_path, sheet_name="Archer Search Report (2)")
     df.columns = df.columns.str.strip()
 
-    # === Step 2: Filter relevant FLT + Local rows ===
+    # === Step 2: Filter relevant FLT + Group rows ===
     flt_local_df = df[
         (df["Current Status"] == "Forward Looking Toxic") &
         (df["IT Component Type"] == "Group")
@@ -116,7 +116,7 @@ def generate_group_flt_details(wb):
 
     for i, oe in enumerate(all_oe_list, start=7):
         ws.cell(row=i, column=1, value="Forward Looking Toxic")
-        ws.cell(row=i, column=2, value="Regional/Local")
+        ws.cell(row=i, column=2, value="Group")
         ws.cell(row=i, column=3, value=oe)
         
         row_sum = 0
@@ -232,3 +232,4 @@ def generate_group_flt_details(wb):
 
     # === Save file ===
     wb.save("Group&LocalTables.xlsx")
+
