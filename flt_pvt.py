@@ -22,12 +22,34 @@ def generate_flt_pvt_sheet(wb):
         .unstack(fill_value=0)
         .reset_index()
     )
-
+    
+    # --- NEW: enforce OE order and ensure Thailand appears even if 0 ---
+    expected_oes = [
+        "Allianz China - Holding", "Allianz China - P&C", "Allianz Indonesia",
+        "Allianz Malaysia", "Allianz Philippine - L&H", "Allianz Singapore",
+        "Allianz Sri Lanka", "Allianz Taiwan - Life", "Allianz Thailand"  # Thailand after Taiwan
+    ]
+    
+    # Reindex to the expected list so missing OEs show up as rows with 0s
+    grouped = (
+        grouped.set_index("Allianz OE Name")
+               .reindex(expected_oes)
+               .reset_index()
+    )
+    
+    # Make sure both columns exist and are numeric
+    for c in ["Group", "Regional/Local"]:
+        if c not in grouped.columns:
+            grouped[c] = 0
+        grouped[c] = pd.to_numeric(grouped[c], errors="coerce").fillna(0).astype(int)
+    
+    # Compute labels & totals
     grouped["Current Status"] = "Forward Looking Toxic"
-    grouped["Grand Total"] = grouped.get("Group", 0) + grouped.get("Regional/Local", 0)
-
-    # Rearranging columns to desired order
+    grouped["Grand Total"] = grouped["Group"] + grouped["Regional/Local"]
+    
+    # Final column order
     final_df = grouped[["Current Status", "Allianz OE Name", "Group", "Regional/Local", "Grand Total"]]
+
 
     # === Step 4: Write to Excel ===
     ws = wb.create_sheet("FLT pvt")
@@ -112,3 +134,4 @@ def generate_flt_pvt_sheet(wb):
             if cell.value:
                 max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[col_letter].width = max_length + 3  # Add padding of 3
+
