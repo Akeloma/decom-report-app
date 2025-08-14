@@ -12,7 +12,7 @@ def generate_toxic_pvt_sheet(wb):
     df = pd.read_excel(file_path, sheet_name="Archer Search Report (2)")
     df.columns = df.columns.str.strip()
 
-    # === Step 2: Filter for FLT only ===
+    # === Step 2: Filter for TOXIC only ===
     flt_df = df[df["Current Status"] == "Toxic"]
 
     # === Step 3: Group and Pivot ===
@@ -22,12 +22,33 @@ def generate_toxic_pvt_sheet(wb):
         .unstack(fill_value=0)
         .reset_index()
     )
-
-    grouped["Current Status"] = "Forward Looking Toxic"
-    grouped["Grand Total"] = grouped.get("Group", 0) + grouped.get("Regional/Local", 0)
-
-    # Rearranging columns to desired order
+    
+    # Enforce OE order and ensure Allianz Thailand row exists even if 0
+    expected_oes = [
+        "Allianz China - Holding", "Allianz China - P&C", "Allianz Indonesia",
+        "Allianz Malaysia", "Allianz Philippine - L&H", "Allianz Singapore",
+        "Allianz Sri Lanka", "Allianz Taiwan - Life", "Allianz Thailand"  # Thailand after Taiwan
+    ]
+    
+    grouped = (
+        grouped.set_index("Allianz OE Name")
+               .reindex(expected_oes)
+               .reset_index()
+    )
+    
+    # Make sure both columns exist and are numeric
+    for c in ["Group", "Regional/Local"]:
+        if c not in grouped.columns:
+            grouped[c] = 0
+        grouped[c] = pd.to_numeric(grouped[c], errors="coerce").fillna(0).astype(int)
+    
+    # Correct status label and add totals
+    grouped["Current Status"] = "Toxic"
+    grouped["Grand Total"]   = grouped["Group"] + grouped["Regional/Local"]
+    
+    # Final column order for writing
     final_df = grouped[["Current Status", "Allianz OE Name", "Group", "Regional/Local", "Grand Total"]]
+
 
     # === Step 4: Write to Excel ===
     ws = wb.create_sheet(title="Toxic pvt")
@@ -115,3 +136,4 @@ def generate_toxic_pvt_sheet(wb):
 
     # Save the file
     wb.save("Group&LocalTables.xlsx")
+
