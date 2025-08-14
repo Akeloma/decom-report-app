@@ -36,6 +36,15 @@ def generate_group_flt_details(wb):
     # Create full list of component-detail triplets
     component_details = flt_local_df[["IT Component Name", "Release", "Toxic from Date"]].drop_duplicates()
 
+    component_details = flt_local_df[["IT Component Name", "Release", "Toxic from Date"]].drop_duplicates()
+
+    if component_details.empty:
+        # create a harmless placeholder column so the sheet still renders
+        import pandas as pd
+        component_details = pd.DataFrame(
+            {"IT Component Name": ["-"], "Release": [""], "Toxic from Date": [pd.NaT]}
+        )
+
     # Create pivot-style mapping for each OE
     pivot_dict = {}
     for oe in all_oe_list:
@@ -232,4 +241,5 @@ def generate_group_flt_details(wb):
 
     # === Save file ===
     wb.save("Group&LocalTables.xlsx")
+
 
